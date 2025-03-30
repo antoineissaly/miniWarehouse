@@ -1,0 +1,377 @@
+{
+    "info": {
+        "_postman_id": "YOUR_UNIQUE_COLLECTION_ID",
+        "name": "Warehouse API Demo",
+        "description": "Collection to test the Flask Warehouse Management API on Heroku.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "YOUR_EXPORTER_ID"
+    },
+    "item": [
+        {
+            "name": "Get Quantity",
+            "item": [
+                {
+                    "name": "Get Quantity - New York (Success)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"warehouseName\": \"New York\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/quantity",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "quantity"
+                            ]
+                        },
+                        "description": "Retrieves available, incoming, and forecast quantities for an existing warehouse."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Quantity - Texas (Has Incoming)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"warehouseName\": \"Texas\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/quantity",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "quantity"
+                            ]
+                        },
+                        "description": "Retrieves quantities for Texas, which has incoming stock initially."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Quantity - Nevada (Not Found)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"warehouseName\": \"Nevada\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/quantity",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "quantity"
+                            ]
+                        },
+                        "description": "Attempts to retrieve quantities for a non-existent warehouse."
+                    },
+                    "response": []
+                },
+                 {
+                    "name": "Get Quantity - (Fail - Bad Request - Missing Body)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/quantity",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "quantity"
+                            ]
+                        },
+                        "description": "Sends a request with an empty JSON body to test input validation."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Requests for the /quantity endpoint."
+        },
+        {
+            "name": "Transfer Quantity",
+            "item": [
+                {
+                    "name": "Transfer Quantity - NY to Boston (Success)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"originWarehouseName\": \"New York\",\n    \"destinationWarehouseName\": \"Boston\",\n    \"quantityTransfer\": 10\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/transfer",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "transfer"
+                            ]
+                        },
+                        "description": "Initiates a valid transfer of 10 units from New York to Boston's incoming stock."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Transfer Quantity - NY to Boston (Fail - Insufficient)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"originWarehouseName\": \"New York\",\n    \"destinationWarehouseName\": \"Boston\",\n    \"quantityTransfer\": 10000\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/transfer",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "transfer"
+                            ]
+                        },
+                        "description": "Attempts to transfer more units than available in the origin warehouse."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Transfer Quantity - Fake to Boston (Fail - Origin Not Found)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"originWarehouseName\": \"FakeWarehouse\",\n    \"destinationWarehouseName\": \"Boston\",\n    \"quantityTransfer\": 5\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/transfer",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "transfer"
+                            ]
+                        },
+                        "description": "Attempts a transfer from a non-existent origin warehouse."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Transfer Quantity - NY to Fake (Fail - Destination Not Found)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"originWarehouseName\": \"New York\",\n    \"destinationWarehouseName\": \"FakeWarehouse\",\n    \"quantityTransfer\": 5\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/transfer",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "transfer"
+                            ]
+                        },
+                        "description": "Attempts a transfer to a non-existent destination warehouse."
+                    },
+                    "response": []
+                },
+                 {
+                    "name": "Transfer Quantity - (Fail - Bad Input - Negative Qty)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"originWarehouseName\": \"New York\",\n    \"destinationWarehouseName\": \"Boston\",\n    \"quantityTransfer\": -5\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/transfer",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "transfer"
+                            ]
+                        },
+                        "description": "Attempts a transfer with an invalid (negative) quantity."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Transfer Quantity - (Fail - Bad Input - Missing Field)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"originWarehouseName\": \"New York\",\n    \"quantityTransfer\": 5\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseURL}}/transfer",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "transfer"
+                            ]
+                        },
+                        "description": "Attempts a transfer with a missing required field in the body."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Requests for the /transfer endpoint."
+        },
+        {
+            "name": "Process Delivery",
+            "item": [
+                {
+                    "name": "Process All Deliveries",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseURL}}/delivery",
+                            "host": [
+                                "{{baseURL}}"
+                            ],
+                            "path": [
+                                "delivery"
+                            ]
+                        },
+                        "description": "Processes all incoming stock, adding it to available quantity and resetting incoming to 0. Check Texas quantity before and after."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Requests for the /delivery endpoint."
+        }
+    ]
+}
