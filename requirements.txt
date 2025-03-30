@@ -1,0 +1,6 @@
+Flask>=2.0 # Or a more recent stable version
+SQLAlchemy>=1.4 # Or a more recent stable version
+Flask-SQLAlchemy>=2.5 # Or a more recent stable version
+psycopg2-binary # PostgreSQL adapter for Python (binary version is easier for Heroku)
+gunicorn # WSGI server for production
+python-dotenv # To load .env file for local development (optional but good practice)
