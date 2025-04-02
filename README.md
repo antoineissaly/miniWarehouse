@@ -205,4 +205,3 @@ A Postman collection (`WarehouseAPI_v2.postman_collection.json`) and environment
 2.  Select the "Warehouse API (Heroku)" environment.
 3.  Update the `baseURL` variable in the environment if your Heroku app URL or local port differs.
 4.  Run the requests to test the API endpoints. Remember that `/transfer` and `/delivery` modify the database state.
-
