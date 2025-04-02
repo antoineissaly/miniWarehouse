@@ -16,26 +16,36 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-# --- Helper Function for Initial Data ---
 def create_initial_data():
-    """Creates initial warehouse data if the table is empty."""
-    with app.app_context():
-        if Warehouse.query.count() == 0:
-            print("Populating initial warehouse data...")
-            initial_warehouses = [
-                Warehouse(warehouseId='0001', warehouseName='New York', quantityAvailable=50, quantityIncoming=0),
-                Warehouse(warehouseId='0002', warehouseName='Boston', quantityAvailable=3, quantityIncoming=0),
-                Warehouse(warehouseId='0003', warehouseName='Texas', quantityAvailable=5, quantityIncoming=20),
-            ]
-            try:
-                db.session.add_all(initial_warehouses)
-                db.session.commit()
-                print("Initial data added successfully.")
-            except (IntegrityError, SQLAlchemyError) as e:
-                db.session.rollback()
-                print(f"Error adding initial data: {e}")
-        else:
-            print("Database already contains data. Skipping initial data population.")
+    """Creates the initial warehouse data (South, West, East, Central) if the table is empty."""
+    # Check if data already exists to prevent duplicates on re-run
+    # Note: This means the function won't overwrite existing data unless the table is empty.
+    if Warehouse.query.count() == 0:
+        print("Database is empty. Populating initial warehouse data (South, West, East, Central)...")
+        # Define the initial warehouse data
+        initial_warehouses = [
+            Warehouse(warehouseId='W001', warehouseName='South', quantityAvailable=1000, quantityIncoming=0),
+            Warehouse(warehouseId='W002', warehouseName='West', quantityAvailable=50000, quantityIncoming=10000),
+            Warehouse(warehouseId='W003', warehouseName='East', quantityAvailable=70000, quantityIncoming=5000),
+            Warehouse(warehouseId='W004', warehouseName='Central', quantityAvailable=200000, quantityIncoming=1000),
+        ]
+        try:
+            # Add the list of warehouse objects to the session
+            db.session.add_all(initial_warehouses)
+            # Commit the transaction to save them to the database
+            db.session.commit()
+            print("Initial data added successfully.")
+        except (IntegrityError, SQLAlchemyError) as e:
+            # Rollback in case of error during commit
+            db.session.rollback()
+            print(f"Error adding initial data: {e}")
+            # Optionally re-raise the exception if needed elsewhere
+            # raise
+    else:
+        # Message indicating data already exists and is not being overwritten by this function
+        print("Database already contains data. Skipping initial data population.")
+
+
 
 
 # --- API Endpoints ---
